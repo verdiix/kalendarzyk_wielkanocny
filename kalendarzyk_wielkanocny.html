@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Kalendarz Wielkanocny</title>
   <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+  <link rel="icon" href="https://emojigraph.org/media/whatsapp/rabbit_1f407.png" type="image/png">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -118,7 +119,7 @@
       padding: 10px;
       border-radius: 10px;
       box-shadow: 0 0 5px rgba(0,0,0,0.3);
-      font-size: 14px;
+      font-size: 17px;
       animation: fadeIn 0.5s ease-in-out;
       display: flex;
       flex-direction: column;
@@ -128,12 +129,14 @@
       overflow: hidden;
       text-align: center;
       color: black;
+      font-family: Arial, sans-serif;
     }
 
     .message img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      font-family: Arial, sans-serif;
     }
 
     @keyframes fadeIn {
@@ -527,6 +530,8 @@
       border-radius: 50%;
       animation: flap 2s infinite ease-in-out;
       transform-origin: top center;
+      border: 2px solid #ccc;
+  border-radius: 50%;
     }
 
     .paws-left {
@@ -674,6 +679,8 @@
       border-radius: 50%;
       animation: flap 2s infinite ease-in-out;
       transform-origin: top center;
+      border: 2px solid #ccc;
+  border-radius: 50%;
     }
 
     .paws-left2 {
@@ -1020,18 +1027,36 @@
   function renderCalendar() {
     calendar.innerHTML = '';
     const messages = [
-      `<p>Wesołych Świąt!</p>`,
-      `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Chocolate_easter_eggs.jpg/320px-Chocolate_easter_eggs.jpg" alt="Easter Image">`,
-      `<p>Zajączek już tu był!</p>`,
-      `<p>Miłego dnia!</p>`,
-      `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Easter_bunny_and_eggs.jpg/320px-Easter_bunny_and_eggs.jpg" alt="Zajączek">`,
-      `<p>Czekoladowe jajko czeka!</p>`,
-      `<p>Wesołych Świąt!</p>`,
-      `<p>Wesołych Świąt!</p>`,
-      `<p>Wesołych Świąt!</p>`,
-      `<p>Wesołych Świąt!</p>`,
-      `<p>Wesołych Świąt!</p>`,
-      `<p>Wesołych Świąt!</p>`
+      `<p>Wesołych Świąt kurczaczku! 🐤</p>`,//1
+      `<img src="https://www.tapeciarnia.pl/tapety/normalne/231822_wielkanoc_kroliczki_kolorowe_pisanki_wiosna.jpg" alt="Easter Image">`,//2
+      `<p>Kocham Cię szalenie mocno! 🌸</p>`,//3
+      `<p>Jesteś miłością mego życia! <br>🐰</p>`,//4
+      `<img src="https://phoneky.co.uk/thumbs/wallpapers/p2ls/seasonal/49/d14860fb12844750.jpg" alt="Zajączek">`,//5
+      `<p>Mam nadzieję, że kolejne święta spędzimy razem! ❤️</p>`,//6
+      `<img src="https://weareawesomeness.wordpress.com/wp-content/uploads/2012/04/naruhina_easter_by_mattwilson83.jpg" alt="Zajączek">`,//7
+      `<img src="https://sakura.org.pl/wp-content/uploads/2023/03/Choshuhizakura-www.jpg" alt="Zajączek">`,//8
+      `<p>Mam <br> nadzieję, że jesteś ze mną szczęśliwa! 🐥</p>`,//9
+      `<p>Bez Ciebie nie ma mnie! 🐔</p>`,//10
+      `<p>Jesteś moim królićkiem! 🐇</p>`,//11
+      `<p>Buzi buzi myszeczko! 👄</p>`,//12
+      `<p>Jaram się Tobą calutką! 🥵</p>`,//13
+      `<p>Jesteś przepiękna! 🩵</p>`,//14
+      `<img src="https://www.tapeciarnia.pl/tapety/na-telefon/tapeta-na-telefon-wielkanocny-kurczaczek.jpg" alt="Zajączek">`,//15
+      `<img src="https://img.freepik.com/darmowe-zdjecie/wielkanocne-tapety-z-kroliczkiem-i-duza-pisanka_1340-29449.jpg" alt="Zajączek">`,//16
+      `<p>Tuli tuli promyszku! 😍</p>`,//17
+      `<p>Trzymam kciuki za super ocenki! 🤗`,//18
+      `<p>Jestem z Ciebie przedumny! ☺️`,//19
+      `<p>Chcę być z Tobą na zawsie! 😚`,//20
+      `<p>Nie jestem idealny, ale staram się! <br>🥺</p>`,//21
+      `<img src="https://png.pngtree.com/png-clipart/20240711/original/pngtree-vector-couple-love-of-cute-bunnies-with-love-heart-animal-valentine-png-image_15534757.png" alt="Zajączek">`,//22
+      `<img src="https://i.pinimg.com/236x/d3/ac/7b/d3ac7b2aef52e76c8cd57aa153aab841.jpg" alt="Zajączek">`,//23
+      `<img src="https://m.media-amazon.com/images/I/61r3sBXHl1L.jpg" alt="Zajączek">`,//24
+      `<img src="https://img.freepik.com/vetores-premium/ilustracao-de-icones-vetoriais-dos-desenhos-animados-de-casal-de-frango-fofo_480044-1156.jpg" alt="Zajączek">`,//25
+      `<p>Jesteś cudowna, wspaniała, idealna! 🥰`,//26
+      `<img src="https://png.pngtree.com/png-vector/20250206/ourmid/pngtree-cute-chicken-in-easter-basket-with-eggs-and-flowers-clipart-illustration-png-image_15410755.png" alt="Zajączek">`,//27
+      `<p>Nie wyobrażam sobie życia bez Ciebie! 😽</p>`,//28
+      `<p>Cieszę się, że jesteśmy razem! ❤️‍🔥`,//29
+      `<p>Wesołych Świąt zajączku! 🐰`//30
     ];
 
     for (let i = 0; i < 30; i++) {
