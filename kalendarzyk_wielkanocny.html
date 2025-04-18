@@ -1,581 +1,708 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalendarz Adwentowy</title>
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://symbl-world.akamaized.net/i/webp/03/49332f5575142df853e37365326ebf.webp" type="image/png">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin: 0;
-            background: url('https://www.pixelstalk.net/wp-content/uploads/2016/08/HD-1920x1080-Christmas-Image.jpg') no-repeat center center fixed;
-            background-size: 100% 100%;
-            color: white;
-            position: relative;
-        }
-
-        h1 {
-            font-family: 'Great Vibes', cursive;
-            font-size: 65px;
-            color: red;
-            background: linear-gradient(45deg, #FF6347, #FFD700, #FF1493, #32CD32, #00BFFF);
-            background-clip: text;
-            animation: glitter 1.5s infinite;
-            text-shadow: 3px 3px 10px rgba(255, 255, 255, 0.6), 0 0 25px rgba(255, 255, 255, 0.6);
-            margin-top: 10px;
-            margin-bottom: -10px;
-            position: relative;
-            z-index: 999;
-        }
-
-        @keyframes glitter {
-            0% {
-                background-position: -200% 0%;
-            }
-            100% {
-                background-position: 200% 0%;
-            }
-        }
-
-        .calendar {
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            gap: 10px;
-            max-width: 70%;
-            margin: 20px auto;
-        }
-
-        .day {
-            position: relative;
-            perspective: 1000px;
-            transform-style: preserve-3d;
-            transition: transform 1s ease;
-            cursor: pointer;
-            border-radius: 5px;
-            background: url('https://img.freepik.com/darmowe-psd/swiateczna-ilustracja-3d-piernika-z-ciasteczkami_23-2149207086.jpg') no-repeat center/cover;
-            color: #e63946;
-            font-size: 16px;
-            padding: 90px;
-            border-radius: 5px;
-            box-sizing: border-box;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .day.locked {
-            pointer-events: none;
-            opacity: 0.5;
-        }
-
-        .day.opened {
-            transform: rotateY(180deg);
-        }
-
-        .front, .back {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            backface-visibility: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 20px;
-            border-radius: 5px;
-        }
-
-        .front {
-            background: rgba(255, 255, 255, 0.8);
-            color: #e63946;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        .back {
-            background: linear-gradient(45deg, #e43206, #81ff47);
-            color: white;
-            transform: rotateY(180deg);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            align-items: center;
-        }
-
-        .countdown {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 24px;
-            color: white;
-            font-weight: bold;
-            z-index: 999;
-        }
-
-        .snowflake {
-            position: fixed;
-            z-index: 9999;
-            pointer-events: none;
-            font-size: 1em;
-            color: white;
-            animation: fall 10s linear infinite, side-to-side 3s ease-in-out infinite;
-        }
-
-        @keyframes fall {
-            0% { transform: translateY(-20vh); }
-            100% { transform: translateY(120vh); }
-        }
-
-        @keyframes side-to-side {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(20px); }
-        }
-
-        .back img {
-            object-fit: cover;
-            width: 100%;
-            height: 100%;
-            border-radius: 5px;
-        }
-
-        .star {
-            position: fixed;
-            z-index: 9999;
-            pointer-events: none;
-            font-size: 2em;
-            color: yellow;
-            animation: twinkle 1.5s infinite alternate;
-            opacity: 0.8;
-        }
-
-        @keyframes twinkle {
-            0% {
-                opacity: 0.3;
-                transform: scale(0.8);
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-
-        .reset-button {
-            margin-top: 1px;
-            padding: 10px 20px;
-            background-color: #e63946;
-            color: white;
-            font-size: 18px;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .reset-button:hover {
-            background-color: #d62828;
-        }
-
-        /* Choinka */
-        .tree {
-            width: 0;
-            height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 100px solid #228B22;
-            position: absolute; /* Zmienione z 'relative' na 'absolute' */
-            margin-bottom: 10px;
-            display: inline-block;
-            bottom: 50%; /* Ustawienie choinki na środku w pionie */
-            transform: translateY(50%); /* Wyrównanie na środek w pionie */
-        }
-        /* Choinki na górze */
-.tree.top {
-    position: absolute;
-    top: 20%; /* Ustawienie choinki w górnej części */
-    right: 2.3%;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-.tree.top1 {
-    position: absolute;
-    top: 20%; /* Ustawienie choinki w górnej części */
-    left: 7.5%;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-/* Choinki na dole */
-.tree.bottom {
-    position: absolute;
-    bottom: 5%; /* Ustawienie choinki w dolnej części */
-    left: 7.5%;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-.tree.bottom1 {
-    position: absolute;
-    bottom: 5%; /* Ustawienie choinki w dolnej części */
-    right: 2.3%;
-    transform: translateX(-50%);
-    z-index: 1000;
-}
-
-/* Choinki po lewej stronie */
-.tree.left {
-    position: absolute;
-    top: 57.5%;
-    left: 5%; /* Ustawienie choinki bardziej w lewo */
-    transform: translateY(-50%);
-    z-index: 1000;
-}
-
-/* Choinki po prawej stronie */
-.tree.right {
-    position: absolute;
-    top: 57.5%;
-    right: 5%; /* Ustawienie choinki bardziej w lewo */
-    transform: translateY(-50%);
-    z-index: 1000;
-}
-
-        .tree::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: -50px;
-            width: 100px;
-            height: 100px;
-            background-color: #228B22;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-        }
-
-        .tree .trunk {
-            width: 30px;
-            height: 20px;
-            background-color: #8B4513;
-            position: absolute;
-            bottom: -120px; /* Pień poniżej choinki */
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        /* Ozdoby na choince */
-        .tree .decoration {
-            position: absolute;
-            background-color: red;
-            border-radius: 50%;
-            animation: blink 1s infinite alternate;
-        }
-
-        .tree .decoration-star {
-            position: absolute;
-            background-color: rgb(251, 255, 0);
-            border-radius: 40%;
-            animation: blink 1s infinite alternate;
-        }
-
-        .tree .decoration-star{
-            top: -70px;
-            left: 0px;
-            width: 30px;
-            height: 30px;
-            background-color: yellow;
-            clip-path: polygon(50% 0%, 65% 40%, 100% 40%, 70% 65%, 80% 100%, 50% 75%, 20% 100%, 30% 65%, 0% 40%, 35% 40%);
-            transform: translateX(-50%);
-        }
-
-        .tree .decoration:nth-child(1) {
-            top: 10px;
-            left: -20px;
-            width: 12px;
-            height: 12px;
-        }
-
-        .tree .decoration:nth-child(2) {
-            top: 40px;
-            left: 10px;
-            width: 12px;
-            height: 12px;
-        }
-
-        .tree .decoration:nth-child(3) {
-            top: 60px;
-            left: -25px;
-            width: 12px;
-            height: 12px;
-        }
-
-        .tree .decoration:nth-child(4) {
-            top: -10px;
-            left: 5px;
-            width: 12px;
-            height: 12px;
-        }
-
-        @keyframes blink {
-            0% {
-                opacity: 0.3;
-            }
-            100% {
-                opacity: 1;
-            }
-        }
-
-        /* Stylizacja gwiazdki na czubku choinki */
-.star-top {
-    position: absolute;
-    top: -40px; /* Umiejscowienie gwiazdki na czubku */
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 2em;
-    color: yellow;
-    text-shadow: 0 0 10px yellow, 0 0 20px yellow, 0 0 30px yellow;
-    animation: twinkle 1.5s infinite alternate;
-    opacity: 0.8;
-}
-
-/* Animacja migotania gwiazdy */
-@keyframes twinkle {
-    0% {
-        opacity: 0.3;
-        transform: scale(0.8);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Kalendarz Wielkanocny</title>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 0;
+      background: url('https://www.tapeciarnia.pl/tapety/normalne/232196_wielkanoc_jajka_pisanki_kwiaty.jpg') no-repeat center center fixed;
+      background-size: 100% 100%;
+      color: white;
+      position: relative;
+      overflow-x: hidden;
     }
-    100% {
-        opacity: 1;
-        transform: scale(1.2);
+
+    h1 {
+      text-align: center;
+      font-family: 'Caveat', cursive;
+      font-size: 48px;
+      color: #d48872;
+      text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.5);
+      margin-bottom: 30px;
+      position: relative;
     }
+
+    h1::before, h1::after {
+      content: "🥚🐣🌸";
+      margin: 0 10px;
+    }
+
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      max-width: 800px;
+      margin: 0 auto;
+      justify-content: center;
+    }
+
+    .egg {
+      width: 100px;
+      height: 140px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: relative;
+      padding: 0;
+      background-color: transparent;
+    }
+
+    .egg .shell {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .egg .top, .egg .bottom {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      border: 2px solid #b76e79;
+      transition: transform 1s ease, opacity 1s ease;
+    }
+
+    .egg .top {
+      top: 0;
+      border-bottom: none;
+      border-radius: 50% 50% 0 0;
+      clip-path: polygon(
+        0% 100%, 10% 90%, 20% 100%, 30% 90%, 40% 100%,
+        50% 90%, 60% 100%, 70% 90%, 80% 100%, 90% 90%, 100% 100%,
+        100% 0%, 0% 0%
+      );
+    }
+
+    .egg .bottom {
+      bottom: 0;
+      border-top: none;
+      border-radius: 0 0 50% 50%;
+      clip-path: polygon(
+        0% 0%, 10% 10%, 20% 0%, 30% 10%, 40% 0%,
+        50% 10%, 60% 0%, 70% 10%, 80% 0%, 90% 10%, 100% 0%,
+        100% 100%, 0% 100%
+      );
+    }
+
+    .egg.opened .top {
+      transform: translateY(-60%) rotate(-25deg);
+      opacity: 0.5;
+    }
+
+    .egg.opened .bottom {
+      transform: translateY(60%) rotate(25deg);
+      opacity: 0.5;
+    }
+
+    .chick {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-47%, -55%);
+      font-size: 50px;
+      z-index: 2;
+    }
+
+    .egg.opened .chick {
+      display: none;
+    }
+
+    .message {
+      width: 100px;
+      height: 140px;
+      background: white;
+      padding: 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
+      font-size: 14px;
+      animation: fadeIn 0.5s ease-in-out;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      overflow: hidden;
+      text-align: center;
+      color: black;
+    }
+
+    .message img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    #resetBtn {
+      margin: 20px auto;
+      padding: 10px 20px;
+      font-size: 16px;
+      display: block;
+    }
+
+    /* Spadające pisanki */
+    .falling-egg {
+      position: fixed;
+      top: -50px;
+      width: 30px;
+      height: 40px;
+      background: radial-gradient(circle at 30% 30%, #fff0f5, #ffb6c1);
+      border-radius: 50% 50% 45% 45%;
+      opacity: 0.7;
+      animation: fall linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Baranek */
+    .sheep-container {
+      position: fixed;
+      bottom: 400px;
+      right: 30px;
+      z-index: 10;
+    }
+
+    .sheep {
+      position: relative;
+      width: 100px;
+      height: 80px;
+      animation: float 3s ease-in-out infinite;
+      left: -200px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .wool {
+      width: 100px;
+      height: 100px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      box-shadow: 
+        -20px 0 white,
+        20px 0 white,
+        0 -20px white,
+        0 20px white;
+    }
+
+    .face_sheep {
+      width: 60px;
+      height: 60px;
+      background: #333;
+      border-radius: 50%;
+      position: absolute;
+      top: 25px;
+      left: -5px;
+      animation: nod 4s ease-in-out infinite;
+    }
+
+    @keyframes nod {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .eye_sheep {
+      width: 8px;
+      height: 8px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      animation: blink_sheep 4s infinite;
+    }
+
+    .eye-left {
+      left: 8px;
+    }
+
+    .eye-right {
+      right: 8px;
+    }
+
+    @keyframes blink_sheep {
+      0%, 90%, 100% { height: 8px; }
+      95% { height: 1px; }
+    }
+
+    .ear_sheep {
+      width: 10px;
+      height: 20px;
+      background: #333;
+      border-radius: 50%;
+      position: absolute;
+      top: 5px;
+    }
+
+    .ear-left {
+      left: -8px;
+      transform: rotate(-30deg);
+    }
+
+    .ear-right {
+      right: -8px;
+      transform: rotate(30deg);
+    }
+
+    .legs_sheep {
+      position: absolute;
+      bottom: -55px;
+      left: 25px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .leg_sheep {
+      width: 5px;
+      height: 20px;
+      background: #444;
+      border-radius: 2px;
+    }
+
+    .bunny-container {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  z-index: 10;
 }
-    </style>
+
+.bunny {
+  position: relative;
+  width: 100px;
+  height: 120px;
+  animation: float 4s ease-in-out infinite;
+}
+
+.bunny .ear {
+  width: 20px;
+  height: 60px;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 10px 10px 0 0;
+  position: absolute;
+  top: -390px;
+  
+}
+
+.bunny .ear-left {
+  left: 10px;
+  transform: rotate(-10deg);
+  left: 225px;
+}
+
+.bunny .ear-right {
+  right: 10px;
+  transform: rotate(10deg);
+  left: 275px;
+}
+
+.bunny .face {
+  width: 70px;
+  height: 70px;
+  background: white;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  position: absolute;
+  top: -350px;
+  left: 225px;
+  z-index: 2;
+}
+
+.bunny .eye {
+  width: 8px;
+  height: 8px;
+  background: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 20px;
+  animation: blink 5s infinite;
+}
+
+.bunny .eye-left {
+  left: 15px;
+}
+
+.bunny .eye-right {
+  right: 15px;
+}
+
+.bunny .nose {
+  width: 6px;
+  height: 6px;
+  background: pink;
+  border-radius: 50%;
+  position: absolute;
+  top: 35px;
+  left: 32px;
+}
+
+.bunny .mouth {
+  width: 12px;
+  height: 6px;
+  border-bottom: 2px solid #555;
+  position: absolute;
+  top: 42px;
+  left: 29px;
+  border-radius: 50%;
+}
+
+.bunny .body {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 350px;
+  left: 230px;
+  z-index: 1;
+}
+
+.bunny .belly {
+  width: 30px;
+  height: 30px;
+  background: pink;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 15px;
+  left: 15px;
+}
+
+.bunny .feet {
+  position: absolute;
+  bottom: 340px;
+  left: 244px;
+  display: flex;
+  gap: 10px;
+}
+
+.bunny .foot {
+  width: 10px;
+  height: 15px;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+}
+
+@keyframes blink {
+  0%, 95%, 100% { height: 8px; }
+  96%, 98% { height: 1px; }
+}
+
+.chicken {
+      position: absolute;
+      top: 750px;
+      left: 234px;
+      transform: translateY(-50%);
+      width: 120px;
+      height: 140px;
+      background: #ffeb3b;
+      border-radius: 60% 60% 50% 50%;
+      box-shadow: inset 0 -5px 0 rgba(0,0,0,0.1);
+    }
+
+    .eye_chick {
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 35px;
+      animation: blink 4s infinite;
+      overflow: hidden;
+    }
+
+    .eye-left {
+      left: 20px;
+    }
+
+    .eye-right {
+      right: 20px;
+    }
+
+    .pupil {
+      width: 8px;
+      height: 8px;
+      background: black;
+      border-radius: 50%;
+      position: absolute;
+      top: 6px;
+      left: 6px;
+    }
+
+    @keyframes blink {
+      0%, 95%, 100% {
+        height: 20px;
+      }
+      96%, 98% {
+        height: 2px;
+      }
+    }
+
+    .beak {
+      width: 0;
+      height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-top: 16px solid orange;
+      position: absolute;
+      top: 65px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .wing {
+      width: 30px;
+      height: 30px;
+      background: #ffeb3b;
+      position: absolute;
+      top: 60px;
+      border-radius: 50%;
+      animation: flap 2s infinite ease-in-out;
+      transform-origin: top center;
+    }
+
+    .wing-left {
+      left: -20px;
+    }
+
+    .wing-right {
+      right: -20px;
+      animation-delay: 0.1s;
+    }
+
+    @keyframes flap {
+      0%, 100% {
+        transform: rotate(0deg);
+      }
+      50% {
+        transform: rotate(30deg);
+      }
+    }
+
+  </style>
 </head>
 <body>
-    <h1>🎀Kalendarz Adwentowy dla Julci🎀</h1>
-    <div class="calendar"></div>
-    <div class="countdown" id="countdown"></div>
-    <button class="reset-button" id="resetButton">Zresetuj Kafelki</button>
-    <div class="tree top">
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration-star"></div>
-        <div class="trunk"></div> <!-- Pień choinki -->
-    </div>
+  <h1>Kalendarz Wielkanocny</h1>
+  <div class="calendar" id="calendar"></div>
+  <button id="resetBtn">Resetuj</button>
 
-    <div class="tree top1">
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration-star"></div>
-        <div class="trunk"></div> <!-- Pień choinki -->
+  <!-- Kontener baranka -->
+  <div class="sheep-container">
+    <div class="sheep">
+      <div class="wool"></div>
+      <div class="face_sheep">
+        <div class="eye_sheep eye-left"></div>
+        <div class="eye_sheep eye-right"></div>
+        <div class="ear_sheep ear-left"></div>
+        <div class="ear_sheep ear-right"></div>
+      </div>
+      <div class="legs_sheep">
+        <div class="leg_sheep"></div>
+        <div class="leg_sheep"></div>
+        <div class="leg_sheep"></div>
+        <div class="leg_sheep"></div>
+      </div>
     </div>
-    
-    <div class="tree left">
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration-star"></div>
-        <div class="trunk"></div> <!-- Pień choinki -->
+  </div>
+  
+
+  <!-- Kontener zajączka -->
+<div class="bunny-container">
+  <div class="bunny">
+    <div class="ear ear-left"></div>
+    <div class="ear ear-right"></div>
+    <div class="face">
+      <div class="eye eye-left"></div>
+      <div class="eye eye-right"></div>
+      <div class="nose"></div>
+      <div class="mouth"></div>
     </div>
-    
-    <div class="tree right">
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration-star"></div>
-        <div class="trunk"></div> <!-- Pień choinki -->
+    <div class="body">
+      <div class="belly"></div>
     </div>
-    
-    <div class="tree bottom">
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration-star"></div>
-        <div class="trunk"></div> <!-- Pień choinki -->
+    <div class="feet">
+      <div class="foot foot-left"></div>
+      <div class="foot foot-right"></div>
     </div>
+  </div>
+</div>
 
-    <div class="tree bottom1">
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration"></div>
-        <div class="decoration-star"></div>
-        <div class="trunk"></div> <!-- Pień choinki -->
+  <!-- Kontener kurczaka -->
+  <div class="chicken">
+    <div class="eye_chick eye-left">
+      <div class="pupil"></div>
     </div>
-    <script>
-        const calendarContainer = document.querySelector('.calendar');
-        const daysInMonth = 24;
-        const backTexts = [
-            "🎄 Kocham Cię bubu za to, że jesteś!! 🎁", "❄️ Każdego dnia jestem wdzięczny, że mam Ciebie. Dziękuję!! 🌟", "🎁 Niespodzianka 3", "✨ Jestem z Ciebie najdumniejszy na świecie!! 🦙",
-            "🕯️ Jesteś najpiękniesza na świecie!! 🦌", "🎁 Jesteś miłością mojego życia 🎅", "🧦 Chciałbym spędzić z Tobą wieczność!! 🎄", "🎁 Niespodzianka 8",
-            "🏔️ Jesteś najmądrzejsza!! 🛷", "⛄ Poradzisz sobie ze wszystkim!! Wierzę w Ciebie z całego serca!! ❄️", "🎁 Niespodzianka 11", "⛄ 3 lata i miesiąc!! Jupiii!! Jeszcze cała wieczność przed nami!! 🍪",
-            "🎅 Jesteśmy już w połowie. Dlatego z tej okazji możesz zrobić listę hihi 🔔", "🌟 Masz przecudowny charakterek!! Nigdy się nie zmieniaj proszę kochanie!! 🍪", "🎁 Niespodzianka 15", "🕯️ Masz przegromne serduszko. Cieszę się, że mogę w nim być!! 🦙",
-            "🦌 Już teraz trzymam mocno kciuki za pierwszą sesję. Rozwalisz ją!! Wiem to!! 🧦", "🏔️ Jesteś moją misią pysią kizią mizią!! ❄️", "🎁 Niespodzianka 19", "⛄ Przetrwaliśmy już dużo razem. Wierze, że już nic nas nie rozłączy!! ✨",
-            "🍪 Jesteś moim przesłodziutkim cukiereczkiem!! 🎅", "🎁 Niespodzianka 22", "🛷 Nie mogę oderwać od Ciebie wzroku!! Jesteś oczkiem w mojej główce!! 🌟", "🎄 Jestem z Tobą przeszczęśliwy!! Dziękuję za wszysttko!! Wesołych Świąt maluszku!! Kocham Cię!! 🎁"
-        ];
-    
-        const daysWithImage = [3, 8, 11, 15, 19, 22];
-        const images = {
-            3: 'https://img.freepik.com/darmowe-wektory/slodki-balwan-postac-z-kreskowki_138676-2916.jpg',
-            8: 'https://www.creativefabrica.com/wp-content/uploads/2022/11/21/Kawaii-Cute-Fluffy-Baby-Reindeer-Smiling-With-Big-Eyes-Wearing-47694729-1.png',
-            11: 'https://tamtamtu.pl/img/products/49/8/4_max.jpg?v=1727252249',
-            15: 'https://w0.peakpx.com/wallpaper/402/607/HD-wallpaper-naruto-and-hinata-art-christmas-happy-merry-christmas-no-pony-winter-x-mas-x-mass.jpg',
-            19: 'https://images.fineartamerica.com/images-medium-large-5/quite-christmas-cat-vintage.jpg',
-            22: 'data:image/jpeg;base64,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',
+    <div class="eye_chick eye-right">
+      <div class="pupil"></div>
+    </div>
+    <div class="beak"></div>
+    <div class="wing wing-left"></div>
+    <div class="wing wing-right"></div>
+  </div>
+</div>
+<script>
+  const calendar = document.getElementById('calendar');
 
-        };
-    
-        // Odczytanie danych o otwartych dniach z ciasteczka
-        let openedDays = JSON.parse(getCookie('openedDays')) || [];
-        console.log('Odczytane dane z ciasteczka: ', openedDays);
-    
-        for (let day = 1; day <= daysInMonth; day++) {
-    const dayElement = document.createElement('div');
-    dayElement.classList.add('day');
-    dayElement.dataset.day = day;
+  function setCookie(name, value, days) {
+    const date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = name + "=" + encodeURIComponent(value) + ";expires=" + date.toUTCString() + ";path=/";
+  }
 
-    const front = document.createElement('div');
-    front.classList.add('front');
-    front.textContent = day;
+  function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift());
+    return null;
+  }
 
-    const back = document.createElement('div');
-    back.classList.add('back');
+  let openedEggs = JSON.parse(getCookie('openedEggs') || '[]');
 
-    if (daysWithImage.includes(day)) {
-        const img = document.createElement('img');
-        img.src = images[day];
-        img.alt = `Obrazek na dzień ${day}`;
-        back.appendChild(img);
-    } else {
-        back.textContent = backTexts[day - 1];
+  let eggIcons = JSON.parse(getCookie('eggIcons') || 'null');
+  if (!eggIcons) {
+    eggIcons = Array.from({ length: 30 }, () => Math.random() < 0.5 ? '🐣' : '🐰');
+    setCookie('eggIcons', JSON.stringify(eggIcons), 365);
+  }
+
+  let eggPatterns = JSON.parse(getCookie('eggPatterns') || 'null');
+  if (!eggPatterns) {
+    eggPatterns = Array.from({ length: 30 }, () => generatePattern());
+    setCookie('eggPatterns', JSON.stringify(eggPatterns), 365);
+  }
+
+  function generatePattern() {
+    const colors = ['#ff9999', '#ffcc99', '#ffff99', '#ccff99', '#99ffcc', '#99ccff', '#cc99ff'];
+    const selected = [];
+    while (selected.length < 3) {
+      const c = colors[Math.floor(Math.random() * colors.length)];
+      if (!selected.includes(c)) selected.push(c);
     }
+    return `repeating-linear-gradient(45deg, ${selected[0]}, ${selected[0]} 10px, ${selected[1]} 10px, ${selected[1]} 20px, ${selected[2]} 20px, ${selected[2]} 30px)`;
+  }
 
-    dayElement.appendChild(front);
-    dayElement.appendChild(back);
+  function saveOpenedEggs() {
+    setCookie('openedEggs', JSON.stringify(openedEggs), 365);
+  }
 
-    // Sprawdzanie aktualnej daty
-    const today = new Date();
-    const currentDay = today.getDate();
-    const currentMonth = today.getMonth();
-    const currentYear = today.getFullYear();
+  function renderCalendar() {
+    calendar.innerHTML = '';
+    const messages = [
+      `<p>Wesołych Świąt!</p>`,
+      `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Chocolate_easter_eggs.jpg/320px-Chocolate_easter_eggs.jpg" alt="Easter Image">`,
+      `<p>Zajączek już tu był!</p>`,
+      `<p>Miłego dnia!</p>`,
+      `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Easter_bunny_and_eggs.jpg/320px-Easter_bunny_and_eggs.jpg" alt="Zajączek">`,
+      `<p>Czekoladowe jajko czeka!</p>`,
+      `<p>Wesołych Świąt!</p>`,
+      `<p>Wesołych Świąt!</p>`,
+      `<p>Wesołych Świąt!</p>`,
+      `<p>Wesołych Świąt!</p>`,
+      `<p>Wesołych Świąt!</p>`,
+      `<p>Wesołych Świąt!</p>`
+    ];
 
-    if (
-        currentYear < 2024 || 
-        (currentYear === 2024 && currentMonth < 11) || 
-        (currentYear === 2024 && currentMonth === 11 && day > currentDay)
-    ) {
-        dayElement.classList.add('locked');
-    } else if (openedDays.includes(day)) {
-        dayElement.classList.add('opened');
-    }
+    for (let i = 0; i < 30; i++) {
+      const eggWrapper = document.createElement('div');
+      eggWrapper.style.position = 'relative';
+      eggWrapper.style.display = 'flex';
+      eggWrapper.style.justifyContent = 'center';
+      eggWrapper.style.alignItems = 'center';
+      eggWrapper.dataset.index = i;
 
-    // Obsługa kliknięcia na kafelek
-    dayElement.addEventListener('click', () => {
-        if (!dayElement.classList.contains('locked') && !openedDays.includes(day)) {
-            dayElement.classList.add('opened');
-            openedDays.push(day);
-            setCookie('openedDays', JSON.stringify(openedDays), 7); // Przechowujemy ciasteczko przez 7 dni
-            console.log('Zapisane otwarte dni w ciasteczku: ', openedDays); // Diagnostyka zapisu
-        }
-    });
+      if (openedEggs.includes(i)) {
+        const message = document.createElement('div');
+        message.className = 'message';
+        message.innerHTML = messages[i % messages.length] || `<p>Brak wiadomości dla jajka ${i + 1}</p>`;
+        eggWrapper.appendChild(message);
+      } else {
+        const egg = document.createElement('button');
+        egg.className = 'egg';
 
-    calendarContainer.appendChild(dayElement);
-}
-    
-        // Funkcja do odliczania dni do Świąt
-        function updateCountdown() {
-            const today = new Date();
-            const christmas = new Date(2024, 11, 24); // 24 grudnia 2024
+        const shell = document.createElement('div');
+        shell.className = 'shell';
 
-            if (today.getDate() === christmas.getDate() && today.getMonth() === christmas.getMonth() && today.getFullYear() === christmas.getFullYear()) {
-                // Wyświetl "Wigilia!!!" jeśli dzisiaj jest 24 grudnia 2024
-                document.getElementById('countdown').textContent = "Wigilia!!!";
-            } else if (today > christmas) {
-                // Wyświetl "Już po Wigilii :(" jeśli dzisiaj jest po 24 grudnia 2024
-                document.getElementById('countdown').textContent = "Już po Wigilii :(";
-            } else {
-                // Odliczaj dni do Wigilii jeśli dzisiaj jest przed 24 grudnia 2024
-                const timeDiff = christmas - today;
-                const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-                document.getElementById('countdown').textContent = `Pozostało ${days + 1} dni do Wigilii!`;
-            }
-        }
+        const topHalf = document.createElement('div');
+        topHalf.className = 'top';
+        topHalf.style.background = eggPatterns[i];
 
-        // Zaktualizuj odliczanie na stronie
-        updateCountdown();
-        setInterval(updateCountdown, 1000 * 60 * 60 * 24); // Aktualizacja co dzień
-    
-        // Resetowanie bez odświeżania strony
-        document.getElementById('resetButton').addEventListener('click', () => {
-            // Usunięcie klasy 'opened' ze wszystkich kafelków
-            const allDays = document.querySelectorAll('.day');
-            allDays.forEach(dayElement => {
-                dayElement.classList.remove('opened');
-            });
-    
-            // Resetowanie ciasteczka
-            setCookie('openedDays', JSON.stringify([]), 7); // Resetowanie ciasteczka
-    
-            openedDays = []; // Wyczyszczenie tablicy otwartych dni
-            console.log('Dni zostały zresetowane');
+        const bottomHalf = document.createElement('div');
+        bottomHalf.className = 'bottom';
+        bottomHalf.style.background = eggPatterns[i];
+
+        const chick = document.createElement('div');
+        chick.className = 'chick';
+        chick.innerText = eggIcons[i];
+
+        shell.appendChild(topHalf);
+        shell.appendChild(bottomHalf);
+        egg.appendChild(shell);
+        egg.appendChild(chick);
+
+        egg.addEventListener('click', () => {
+          egg.classList.add('opened');
+          setTimeout(() => {
+            openedEggs.push(i);
+            saveOpenedEggs();
+            const message = document.createElement('div');
+            message.className = 'message';
+            message.innerHTML = messages[i % messages.length] || `<p>Brak wiadomości dla jajka ${i + 1}</p>`;
+            eggWrapper.innerHTML = '';
+            eggWrapper.appendChild(message);
+          }, 1000);
         });
-    
-        // Funkcja do ustawiania ciasteczek
-        function setCookie(name, value, days) {
-            const expires = new Date();
-            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
-        }
-    
-        // Funkcja do odczytu ciasteczek
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
 
-        // Funkcja tworząca śnieżynki
-        function createSnowflake() {
-            const snowflake = document.createElement('div');
-            snowflake.classList.add('snowflake');
-            snowflake.textContent = '❄';
-            snowflake.style.left = Math.random() * 100 + 'vw';
-            snowflake.style.top = Math.random() * 100 + 'vh';
-            snowflake.style.opacity = Math.random();
-            snowflake.style.fontSize = Math.random() * 30 + 20 + 'px';
-            document.body.appendChild(snowflake);
-            setTimeout(() => {
-                snowflake.remove();
-            }, 10000);
-        }
+        eggWrapper.appendChild(egg);
+      }
 
-        setInterval(createSnowflake, 150);
+      calendar.appendChild(eggWrapper);
+    }
+  }
 
-        function createStar() {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            star.textContent = '★';
-            star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.fontSize = Math.random() * 15 + 15 + 'px';
-            document.body.appendChild(star);
-            setTimeout(() => {
-                star.remove();
-            }, 2000);
-        }
+  document.getElementById('resetBtn').addEventListener('click', () => {
+    ['openedEggs', 'eggIcons', 'eggPatterns'].forEach(name => {
+      document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+    });
+    location.reload();
+  });
 
-        setInterval(createStar, 200);
-    </script>
-    
-    
-    
+  function createFallingEgg() {
+    const egg = document.createElement('div');
+    egg.className = 'falling-egg';
+    egg.style.left = Math.random() * window.innerWidth + 'px';
+    egg.style.animationDuration = 5 + Math.random() * 5 + 's';
+    document.body.appendChild(egg);
+    setTimeout(() => egg.remove(), 10000);
+  }
+
+  setInterval(createFallingEgg, 300);
+
+  renderCalendar();
+</script>
 </body>
 </html>
